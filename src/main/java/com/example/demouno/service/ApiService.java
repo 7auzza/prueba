@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 import org.springframework.stereotype.Service;
 
 import com.example.demouno.entities.EntityResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 @Service
 public class ApiService {
@@ -26,9 +26,10 @@ public class ApiService {
 
 			HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-			ObjectMapper objectMapper = new ObjectMapper();
-			EntityResponse res = objectMapper.readValue(response.body(), EntityResponse.class);
-			return res;
+			Gson gson = new Gson();
+			String res = response.body();
+			EntityResponse entityResponse = gson.fromJson(res, EntityResponse.class);
+			return entityResponse;
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
